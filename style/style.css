@@ -1,0 +1,173 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --bg-color: #000000;
+  --start-btn-bg-color: rgba(48, 209, 88, 0.2);
+  --start-btn-text-color: rgb(48, 209, 88);
+  --start-btn-active-color: rgba(48, 209, 88, 0.1);
+  --stop-btn-bg-color: rgba(255, 69, 58, 0.2);
+  --stop-btn-text-color: rgb(255, 69, 58);
+  --stop-btn-active-color: rgba(255, 69, 58, 0.15);
+  --reset-btn-bg-color: #49494c;
+  --reset-btn-text-color: #fff;
+  --reset-btn-active-color: #222223;
+  --lap-btn-bg-color: rgba(73, 73, 76, 0.5);
+}
+
+body {
+  background-color: aliceblue;
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+section .stopwatch {
+  width: 331px;
+  max-height: 715px;
+  margin: 0 auto;
+  background-color: var(--bg-color);
+}
+/* section .stopwatch__content__container {
+} */
+
+section .stopwatch__content__container__timer {
+  margin: 0 1.85rem;
+}
+
+section .stopwatch__content__container__timer p {
+  color: white;
+  font-weight: 200;
+  font-size: 70px;
+  text-align: center;
+  margin-top: 11.1825rem;
+  display: flex;
+}
+section .stopwatch__content__container__timer p span {
+  min-width: 82px;
+}
+section .stopwatch__content__container__timer p .time-divider {
+  min-width: 15px;
+}
+
+section .stopwatch__content__container__timer p ~ span {
+  width: auto;
+}
+
+/* Stopwatch controlls */
+section .stopwatch__content__container__controll {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.6875rem;
+  margin-top: 6.25rem;
+}
+
+/* button styling */
+
+section .stopwatch__content__container__controll button {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 20px;
+  background-color: var(--reset-btn-bg-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  outline: var(--bg-color) solid 1.5px;
+  outline-offset: -3px;
+}
+
+section .stopwatch__content__container__controll .start-btn {
+  background-color: var(--start-btn-bg-color);
+  color: var(--start-btn-text-color);
+}
+section .stopwatch__content__container__controll .start-btn:active {
+  background-color: var(--start-btn-active-color);
+}
+
+section .stopwatch__content__container__controll .reset-btn,
+.lap-btn {
+  background-color: var(--reset-btn-bg-color);
+  color: var(--reset-btn-text-color);
+}
+section .stopwatch__content__container__controll .lap-btn {
+  background-color: var(--lap-btn-bg-color);
+}
+section .stopwatch__content__container__controll .reset-btn {
+  display: none;
+}
+
+section .stopwatch__content__container__controll .reset-btn:active,
+section .stopwatch__content__container__controll button.lap-btn:active {
+  background-color: var(--reset-btn-active-color);
+}
+
+section .stopwatch__content__container__controll .stop-btn {
+  background-color: var(--stop-btn-bg-color);
+  color: var(--stop-btn-text-color);
+}
+section .stopwatch__content__container__controll .stop-btn:active {
+  background-color: var(--stop-btn-active-color);
+}
+section .stopwatch__content__container__controll .stop-btn {
+  display: none;
+}
+
+section .stopwatch__content__container__lap-record__lap-times {
+  max-width: 307px;
+  margin: 0 auto;
+  overflow-y: scroll;
+  height: 279px;
+  border-top: 0.5px solid var(--reset-btn-bg-color);
+  scrollbar-color: none;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+section .stopwatch__content__container__lap-record__lap-times p {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  height: 34px;
+  /* border-bottom: 0.5px solid var(--reset-btn-bg-color); */
+}
+
+section .stopwatch__content__container__lap-record__lap-times ol li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid var(--reset-btn-bg-color);
+}
+
+section
+  .stopwatch__content__container__lap-record__lap-times
+  ol
+  li
+  .shortest-lap {
+  color: var(--start-btn-text-color);
+}
+section
+  .stopwatch__content__container__lap-record__lap-times
+  ol
+  li
+  p.longest-lap {
+  color: var(--stop-btn-text-color);
+}
+
+/* Removing scrollbar */
+section
+  .stopwatch__content__container__lap-record__lap-times::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
