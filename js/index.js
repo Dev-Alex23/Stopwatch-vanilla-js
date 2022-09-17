@@ -4,6 +4,7 @@ const resetBtn = document.querySelector(".reset-btn");
 const lapBtn = document.querySelector(".lap-btn");
 const stopBtn = document.querySelector(".stop-btn");
 const lapList = document.querySelector(".lap-time-list");
+const timeDisplay = document.querySelector(".time-display");
 
 // save dom nodes with $
 
@@ -18,6 +19,7 @@ let seconds = 0;
 let minutes = 0;
 let hours = 0;
 let elaspedTime = 0;
+let currentDsiplayTime = 0;
 let startStopToggle = false;
 let startTimer;
 let shortestLap;
@@ -32,24 +34,9 @@ const startStopwatch = () => {
   startStopToggle = true;
   startTimer = setInterval(() => {
     elaspedTime++;
-    // console.log(elaspedTime + "ms");
-    milliseconds++;
-    if (milliseconds < 10) milliseconds = `${padTo2Digits(milliseconds)}`;
-    displayMilliSeconds.innerHTML = milliseconds;
-
-    if (milliseconds === 100) {
-      milliseconds = 00;
-      seconds++;
-      if (seconds < 10) seconds = `${padTo2Digits(seconds)}`;
-      displaySeconds.innerHTML = seconds;
-    }
-
-    if (seconds === 59 && milliseconds === 99) {
-      seconds = 00;
-      minutes++;
-      if (minutes < 10) minutes = `${padTo2Digits(minutes)}`;
-      displayMinutes.innerHTML = minutes;
-    }
+    currentDsiplayTime++;
+    console.log(elaspedTime + "ms");
+    timeDisplay.innerHTML = convertMillisecondsToTime(currentDsiplayTime);
   }, stopwatchInterval);
 
   // conditional Buttons display
@@ -70,10 +57,6 @@ const padTo2Digits = (num) => {
 
 // convertTime function
 const convertMillisecondsToTime = (milliseconds) => {
-  const padTo2Digits = (num) => {
-    return num.toString().padStart(2, "0");
-  };
-
   let milliSeconds = milliseconds % 100;
   let seconds = Math.floor(milliseconds / 100);
   let minutes = Math.floor(seconds / 60);

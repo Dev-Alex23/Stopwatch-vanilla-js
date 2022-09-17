@@ -43,8 +43,8 @@ section .stopwatch {
 section .stopwatch__content__container__timer {
   margin: 0 1.85rem;
 }
-
-section .stopwatch__content__container__timer p {
+section .stopwatch__content__container__timer p.time-display {
+  font-variant-numeric: tabular-nums;
   color: white;
   font-weight: 200;
   font-size: 70px;
@@ -52,6 +52,7 @@ section .stopwatch__content__container__timer p {
   margin-top: 11.1825rem;
   display: flex;
 }
+
 section .stopwatch__content__container__timer p span {
   min-width: 82px;
 }
@@ -144,11 +145,19 @@ section .stopwatch__content__container__lap-record__lap-times p {
   /* border-bottom: 0.5px solid var(--reset-btn-bg-color); */
 }
 
+section .stopwatch__content__container__lap-record__lap-times ol {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 section .stopwatch__content__container__lap-record__lap-times ol li {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 0.5px solid var(--reset-btn-bg-color);
+}
+section .stopwatch__content__container__lap-record__lap-times ol li p.lap-time {
+  font-variant-numeric: tabular-nums;
 }
 
 section
