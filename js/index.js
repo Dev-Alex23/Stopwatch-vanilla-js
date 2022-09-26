@@ -1,43 +1,35 @@
-// Creating variables for each of the buttons
+import { getFormattedTime } from "./utils.js";
+
 const $startButton = document.querySelector(".start-btn");
 const $resetButton = document.querySelector(".reset-btn");
 const $lapButton = document.querySelector(".lap-btn");
 const $stopButton = document.querySelector(".stop-btn");
-const lapList = document.querySelector(".lap-time-list");
 const $timeDisplay = document.querySelector(".time-display");
 
-// save dom nodes with $
-// use object to have access to different grouped-variables
-
-let stopwatchInterval = 10;
-let milliseconds = 0;
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
-let elaspedTime = 0;
+let currentLapElapsedTime = 0;
 let currentDisplayTime = 0;
 let isStartTimer = false;
 let startTimerID;
-// **************************//
-let tableRow;
-let tableRowCurrentLap;
-let tableRowLapTime;
-let currentTableRow = 1;
+let currentLap = 1;
+let lapArray = [];
 
+const updateTimer = () => {
+  currentLapElapsedTime++;
+  currentDisplayTime++;
+  if (currentLap === 1) {
+    createRow(currentLapElapsedTime);
+  }
+  startTimerID = setTimeout(updateTimer, 10);
+  $timeDisplay.innerText = getFormattedTime(currentDisplayTime);
+  tableRowLapTime.innerText = getFormattedTime(currentLapElapsedTime);
+};
+
+// schedule a timeout to be triggered after 50 ms
+// run this code when it is triggered
+// after running the code schedule the same code to run again after 50ms
 const startStopwatch = () => {
   isStartTimer = true;
-  startTimerID = setInterval(() => {
-    elaspedTime++;
-    currentDisplayTime++;
-    if (currentlap === 1) {
-      tableRow = table.insertRow(0);
-      tableRowCurrentLap = tableRow.insertCell(0);
-      tableRowLapTime = tableRow.insertCell(1);
-      tableRowCurrentLap.innerHTML = `Lap ${currentlap++}`;
-    }
-    $timeDisplay.innerHTML = getFormattedTime(currentDisplayTime);
-    tableRowLapTime.innerHTML = getFormattedTime(elaspedTime);
-  }, stopwatchInterval);
+  startTimerID = setTimeout(updateTimer, 10);
 
   // conditional Buttons display
   if (isStartTimer) {
@@ -50,35 +42,9 @@ const startStopwatch = () => {
   $lapButton.style.backgroundColor = "var(--reset-btn-bg-color)";
 };
 
-//padding Functions
-const padTo2Digits = (num) => {
-  return num.toString().padStart(2, "0");
-};
-
-// convertTime function
-const getFormattedTime = (duration) => {
-  milliseconds = duration % 100;
-  seconds = Math.floor(duration / 100);
-  minutes = Math.floor(seconds / 60);
-  hours = Math.floor(minutes / 60);
-
-  seconds = seconds % 60;
-  minutes = minutes % 60;
-
-  if (minutes < 60) {
-    return `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}.${padTo2Digits(
-      milliseconds
-    )}`;
-  } else {
-    return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(
-      seconds
-    )}.${padTo2Digits(milliseconds)}`;
-  }
-};
-
 // Stopping function
 const stopTimer = () => {
-  clearInterval(startTimerID);
+  clearTimeout(startTimerID);
   isStartTimer = false;
 
   // conditional Button display
@@ -95,69 +61,84 @@ const resetTimer = () => {
   clearInterval(startTimerID);
   isStartTimer = false;
   lapArray = [];
-  currentlap = 1;
-  seconds = 0;
-  minutes = 0;
-  milliseconds = 0;
+  currentLap = 1;
+  shortestLap = Infinity;
+  longestLap = -1;
   currentDisplayTime = 0;
-  elaspedTime = 0;
-  table.innerHTML = "";
-  $timeDisplay.innerHTML = getFormattedTime(currentDisplayTime);
+  $table.innerText = "";
   $resetButton.style.display = "none";
   $lapButton.style.display = "block";
+  $timeDisplay.innerText = getFormattedTime(currentDisplayTime);
 };
 
-let shortestLap;
-let longestLap;
-let currentlap = 1;
-let lapArray = [];
-let table = document.querySelector("table");
+const $table = document.querySelector("table");
+const $tableBody = $table.getElementsByTagName("tbody");
+const getAllTableRow = $tableBody[0].getElementsByTagName("tr");
 
-const createRow = (num) => {
-  tableRow = table.insertRow(0);
+let shortestLap = Infinity;
+let longestLap = -1;
+let tableRow;
+let tableRowCurrentLap;
+let tableRowLapTime;
+
+const createRow = () => {
+  tableRow = $table.insertRow(0);
   tableRowCurrentLap = tableRow.insertCell(0);
   tableRowLapTime = tableRow.insertCell(1);
+  tableRowLapTime.innerText = currentLapElapsedTime;
+  tableRowCurrentLap.innerText = `Lap ${currentLap++}`;
 
-  tableRowCurrentLap.innerHTML = `Lap ${currentlap++}`;
-  tableRowLapTime.innerHTML = `${getFormattedTime(num)}`;
-  elaspedTime = 0;
-};
+  console.log(getAllTableRow);
+  // find the old longest lap and update its class
+  // if (num) tableRow.classList;
 
-const compareLap = () => {
-  longestLap = getFormattedTime(Math.max(...lapArray));
-  shortestLap = getFormattedTime(Math.min(...lapArray));
-
-  for (let i = 0, row; (row = table.rows[i + 1]); i++) {
-    for (let j = 0, col; (col = row.cells[j]); j++) {
-      if (currentlap >= 3 && shortestLap !== longestLap) {
-        if (col.innerText === longestLap) {
-          col.classList.add("longest-lap");
-        } else {
-          col.classList.remove("longest-lap");
-        }
-        if (col.innerText === shortestLap) {
-          col.classList.add("shortest-lap");
-        } else {
-          col.classList.remove("shortest-lap");
-        }
-      }
+  if (lapArray.length === 2) {
+    if (currentLapElapsedTime > lapArray[0]) {
+      longestLap = lapArray[1];
+      shortestLap = lapArray[0];
+      getAllTableRow[1].classList.add("longest-lap");
+      getAllTableRow[2].classList.add("shortest-lap");
+      console.log("Longest Lap", longestLap);
+      console.log("shortest Lap", shortestLap);
+    } else {
+      longestLap = lapArray[0];
+      shortestLap = lapArray[1];
+      getAllTableRow[2].classList.add("longest-lap");
+      getAllTableRow[1].classList.add("shortest-lap");
+      console.log("Longest Lap", longestLap);
+      console.log("shortest Lap", shortestLap);
     }
   }
+
+  if (lapArray.length >= 3) {
+    if (longestLap < currentLapElapsedTime) {
+      longestLap = currentLapElapsedTime;
+      getAllTableRow[1].classList.add("longest-lap");
+      console.log("Longest Lap", longestLap);
+      let removeLongestLap = document.getElementsByClassName("longest-lap");
+      removeLongestLap[1].classList.remove("longest-lap");
+    }
+    if (currentLapElapsedTime < shortestLap) {
+      shortestLap = currentLapElapsedTime;
+      getAllTableRow[1].classList.add("shortest-lap");
+      console.log("Shortest Lap", shortestLap);
+      let removeShortestLap = document.getElementsByClassName("shortest-lap");
+      removeShortestLap[1].classList.remove("shortest-lap");
+    }
+  }
+  currentLapElapsedTime = 0;
 };
 
 const lapSplitTime = () => {
-  if (elaspedTime === 0 && !isStartTimer) {
+  if (currentLapElapsedTime === 0 && !isStartTimer) {
     return;
   } else {
-    lapArray.push(elaspedTime);
-    createRow(elaspedTime);
-    compareLap();
+    lapArray.push(currentLapElapsedTime);
+    createRow(currentLapElapsedTime);
   }
 };
 
-// .0NCLICK
-
-$startButton.addEventListener("click", startStopwatch);
-$stopButton.addEventListener("click", stopTimer);
-$resetButton.addEventListener("click", resetTimer);
-$lapButton.addEventListener("click", lapSplitTime);
+$startButton.onclick = startStopwatch;
+$stopButton.onclick = stopTimer;
+$resetButton.onclick = resetTimer;
+$lapButton.onclick = lapSplitTime;
