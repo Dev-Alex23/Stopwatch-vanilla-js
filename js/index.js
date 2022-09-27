@@ -73,7 +73,7 @@ const resetTimer = () => {
 
 const $table = document.querySelector("table");
 const $tableBody = $table.getElementsByTagName("tbody");
-const getAllTableRow = $tableBody[0].getElementsByTagName("tr");
+const getAllTableRow = document.getElementsByTagName("table")[0].rows;
 
 let shortestLap = Infinity;
 let longestLap = -1;
@@ -88,7 +88,6 @@ const createRow = () => {
   tableRowLapTime.innerText = currentLapElapsedTime;
   tableRowCurrentLap.innerText = `Lap ${currentLap++}`;
 
-  console.log(getAllTableRow);
   // find the old longest lap and update its class
   // if (num) tableRow.classList;
 
@@ -98,15 +97,11 @@ const createRow = () => {
       shortestLap = lapArray[0];
       getAllTableRow[1].classList.add("longest-lap");
       getAllTableRow[2].classList.add("shortest-lap");
-      console.log("Longest Lap", longestLap);
-      console.log("shortest Lap", shortestLap);
     } else {
       longestLap = lapArray[0];
       shortestLap = lapArray[1];
       getAllTableRow[2].classList.add("longest-lap");
       getAllTableRow[1].classList.add("shortest-lap");
-      console.log("Longest Lap", longestLap);
-      console.log("shortest Lap", shortestLap);
     }
   }
 
@@ -115,15 +110,15 @@ const createRow = () => {
       longestLap = currentLapElapsedTime;
       getAllTableRow[1].classList.add("longest-lap");
       console.log("Longest Lap", longestLap);
-      let removeLongestLap = document.getElementsByClassName("longest-lap");
-      removeLongestLap[1].classList.remove("longest-lap");
+      let removeOldLongestLap = document.getElementsByClassName("longest-lap");
+      removeOldLongestLap[1].classList.remove("longest-lap");
     }
     if (currentLapElapsedTime < shortestLap) {
       shortestLap = currentLapElapsedTime;
       getAllTableRow[1].classList.add("shortest-lap");
-      console.log("Shortest Lap", shortestLap);
-      let removeShortestLap = document.getElementsByClassName("shortest-lap");
-      removeShortestLap[1].classList.remove("shortest-lap");
+      let removeOldShortestLap =
+        document.getElementsByClassName("shortest-lap");
+      removeOldShortestLap[1].classList.remove("shortest-lap");
     }
   }
   currentLapElapsedTime = 0;
@@ -135,6 +130,7 @@ const lapSplitTime = () => {
   } else {
     lapArray.push(currentLapElapsedTime);
     createRow(currentLapElapsedTime);
+    console.log(getAllTableRow);
   }
 };
 
