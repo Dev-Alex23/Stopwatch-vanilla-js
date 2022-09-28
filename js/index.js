@@ -24,9 +24,6 @@ const updateTimer = () => {
   tableRowLapTime.innerText = getFormattedTime(currentLapElapsedTime);
 };
 
-// schedule a timeout to be triggered after 50 ms
-// run this code when it is triggered
-// after running the code schedule the same code to run again after 50ms
 const startStopwatch = () => {
   isStartTimer = true;
   startTimerID = setTimeout(updateTimer, 10);
@@ -42,12 +39,10 @@ const startStopwatch = () => {
   $lapButton.style.backgroundColor = "var(--reset-btn-bg-color)";
 };
 
-// Stopping function
 const stopTimer = () => {
-  clearTimeout(startTimerID);
+  clearInterval(startTimerID);
   isStartTimer = false;
 
-  // conditional Button display
   if (!isStartTimer) {
     $startButton.style.display = "block";
     $stopButton.style.display = "none";
@@ -56,7 +51,6 @@ const stopTimer = () => {
   }
 };
 
-// Reset function
 const resetTimer = () => {
   clearInterval(startTimerID);
   isStartTimer = false;
@@ -65,6 +59,7 @@ const resetTimer = () => {
   shortestLap = Infinity;
   longestLap = -1;
   currentDisplayTime = 0;
+  currentLapElapsedTime = 0;
   $table.innerText = "";
   $resetButton.style.display = "none";
   $lapButton.style.display = "block";
@@ -72,7 +67,6 @@ const resetTimer = () => {
 };
 
 const $table = document.querySelector("table");
-const $tableBody = $table.getElementsByTagName("tbody");
 const getAllTableRow = document.getElementsByTagName("table")[0].rows;
 
 let shortestLap = Infinity;
@@ -81,15 +75,12 @@ let tableRow;
 let tableRowCurrentLap;
 let tableRowLapTime;
 
-const createRow = () => {
+export const createRow = () => {
   tableRow = $table.insertRow(0);
   tableRowCurrentLap = tableRow.insertCell(0);
   tableRowLapTime = tableRow.insertCell(1);
   tableRowLapTime.innerText = currentLapElapsedTime;
   tableRowCurrentLap.innerText = `Lap ${currentLap++}`;
-
-  // find the old longest lap and update its class
-  // if (num) tableRow.classList;
 
   if (lapArray.length === 2) {
     if (currentLapElapsedTime > lapArray[0]) {
@@ -128,9 +119,8 @@ const lapSplitTime = () => {
   if (currentLapElapsedTime === 0 && !isStartTimer) {
     return;
   } else {
-    lapArray.push(currentLapElapsedTime);
+    lapArray = [...lapArray, currentLapElapsedTime];
     createRow(currentLapElapsedTime);
-    console.log(getAllTableRow);
   }
 };
 
